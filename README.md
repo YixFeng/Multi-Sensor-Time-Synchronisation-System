@@ -3,6 +3,7 @@
 <p align="center" width="100%">
    <img alt="title" src="./assets/img1.png"/>
 </p>
+
 ## News
 
 >1. 很多小伙伴咨询接线的问题，我们在[全功能同步板快速开始](./assets/全功能同步板快速开始.md)与[核心板快速开始](./assets/核心板快速开始.md)介绍了MID360与工业相机的接线。
