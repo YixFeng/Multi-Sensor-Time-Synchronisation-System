@@ -83,6 +83,7 @@ int main(int argc, char** argv) {
         for (auto& cam : all_cam_names) {
             while (DataManger::GetInstance().GetNewCamData(cam, img_data)) {
                 sensor_msgs::ImagePtr msg =
+                // mono8:灰度类型,bgr8:彩图，具体需要根据相机类型进行修改
                         cv_bridge::CvImage(std_msgs::Header(), "mono8", img_data.image.clone()).toImageMsg();
                 msg->header.stamp = CreateRosTimestamp(img_data.time_stamp_us);
                 pub_list[cam].publish(msg);
