@@ -1,6 +1,6 @@
 # Multi-Sensor Time Synchronisation System
 # 多传感器时间同步系统
-**Keywords**: Multi-Sensor, Time Synchronization, ROS, IMU, Camera, Lidar, Mid36, VIO, LSLAM, PTP
+
 <p align="center" width="100%">
    <img alt="title" src="./assets/img1.png"/>
 </p>
