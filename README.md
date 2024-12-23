@@ -1,7 +1,8 @@
 # Multi-Sensor Time Synchronisation System
 # 多传感器时间同步系统
-![title](./assets/img1.png)
-
+<p align="center" width="100%">
+   <img alt="title" src="./assets/img1.png"/>
+</p>
 ## News
 
 >1. 很多小伙伴咨询接线的问题，我们在[全功能同步板快速开始](./assets/全功能同步板快速开始.md)与[核心板快速开始](./assets/核心板快速开始.md)介绍了MID360与工业相机的接线。
@@ -10,7 +11,7 @@
 >3. 很多小伙伴咨询同步精度，整体同步精度可以满足VIO，LO，VSLAM，LSLAM等绝大数多的算法应用，至于是否符合您的需求，需要您自己测试。
 >4. 全功能版本IP设置好之后，需要更改主机IP(同一网段)。然后更改demo中的IP，才能使用。
 
-## 简介
+## 简介 (Brief)
 多传感器的时间同步是一个很重要的问题，尤其对多传感器融合系统。不正确的时间同步会导致数据融合错误，影响系统的性能。
 对于大多数研究人员来说，这是一个很底层又复杂的问题，却不是他们的研究方向。
 更多的精力应该放在设计传感器融合算法上，而不是在时间同步上。因此，我们设计了一个这样一个系统，让时间同步不再是一件难事。
@@ -186,7 +187,10 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
   pub.publish(imu_msg_data);
 }
 ```
-![full](./assets/angle.png)
+<p align="center" width="100%">
+   <img alt="full" src="./assets/angle.png"/>
+</p>
+
 ## 自定义相机型号 (Custom Camera Models)
 
 如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编程，如果需要我们协助支持，请私信或者提出相关的issue。在`demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
@@ -285,7 +289,7 @@ void CustCamManger::Receive(const std::string &name) const {
 如果您手中没有相机，需要购买相机或者镜头，以及搭建自己的多相机模组，我们这里有恰好有一些建议：[这里](./assets/相机购买指南.md)。
 如果您手中没有雷达，需要雷达，以及搭建自己的基于雷达的多传感器融合模组，我们这里建议选择支持PPS秒脉冲同步功能的雷达设备。
 
-# 购买与咨询
+# 购买与咨询 (Purchasing & Consultation)
 [【淘宝】Access denied MF3543 「多相机IMU同步板网口串口同步工业相机六轴姿态」
 点击链接直接打开 或者 淘宝搜索直接打开](https://item.taobao.com/item.htm?ft=t&id=832624497202)
 
