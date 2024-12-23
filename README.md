@@ -1,10 +1,11 @@
 # Multi-Sensor Time Synchronisation System
 # 多传感器时间同步系统
+
 <p align="center" width="100%">
    <img alt="title" src="./assets/img1.png"/>
 </p>
 
-## News
+## 通知 (News)
 
 >1. 很多小伙伴咨询接线的问题，我们在[全功能同步板快速开始](./assets/全功能同步板快速开始.md)与[核心板快速开始](./assets/核心板快速开始.md)介绍了MID360与工业相机的接线。
    如果相机/雷达型号特殊或者帮忙接线，可以旺旺联系我们。
@@ -291,6 +292,7 @@ void CustCamManger::Receive(const std::string &name) const {
 如果您手中没有雷达，需要雷达，以及搭建自己的基于雷达的多传感器融合模组，我们这里建议选择支持PPS秒脉冲同步功能的雷达设备。
 
 # 购买与咨询 (Purchasing & Consultation)
+
 [【淘宝】Access denied MF3543 「多相机IMU同步板网口串口同步工业相机六轴姿态」
 点击链接直接打开 或者 淘宝搜索直接打开](https://item.taobao.com/item.htm?ft=t&id=832624497202)
 
