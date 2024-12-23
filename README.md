@@ -16,9 +16,9 @@
 更多的精力应该放在设计传感器融合算法上，而不是在时间同步上。因此，我们设计了一个这样一个系统，让时间同步不再是一件难事。
 
 
-## 如何开始
+## 如何开始 (Getting Started)
 
-### 开始之前
+### 开始之前 (Before You Begin)
 你依旧需要一些关于时间同步的基础知识，才能够更好的使用这个系统。
 幸运的是，我们将必要的相关知识整理到了[这里](./assets/时间同步原理.md)。针对不同平台的用户提供基于ROS/ZMQ例程，也提供ARM/X86环境的支持。下表是我们支持的类型
 >| 设备类型        | 品牌                          |同步方式 |
@@ -29,21 +29,22 @@
 >| 3D激光        | Mid360/Mid70/RoboSense系列/... | PPS   |
 >| RTK/GPS     | 暂无                          | NMEA   |
 >| 主机(ARM/X86) | Intel/AMD/Jetson/RockChip/... | PTP    |
-### 硬件准备
+### 硬件准备 (Hardware Setup)
 
 准备**全功能时间同步板**或**时间同步核心板**，核心板尺寸较小适合无人机搭载，**全功能时间同步板**与树莓派尺寸相同，安装孔位对应(端子型号GH1.25)。连接好需要同步的传感器和电源。硬件接口的定义如下：
 
 全功能时间同步板：
 
-![full](./assets/img2.png)
-
+<p align="center" width="100%">
+   <img alt="full" src="./assets/img2.png"/>
+</p>
 时间同步核心板：
-
-![core](./assets/img3.png)
-
+<p align="center" width="100%">
+   <img alt="core" src="./assets/img3.png"/>
+</p>
 按照上图的定义，将传感器的同步信号连接到板子上的对应接口，然后连接电源。下面是一个同步线连接的参考示例：
 
-### 烧入固件
+### 烧入固件 (Firmware Flashing)
 在firmware文件夹下，有mini_xx.uf2文件和full_xx.uf2文件，分别对应最小功能固件和全功能固件。其中full表示全功能，V3表示第三代同步板。
 
 >| 固件类型                 | 功能            | 支持硬件版本 |
@@ -56,16 +57,16 @@
 
 你可以参考[全功能同步板快速开始](./assets/全功能同步板快速开始.md)与[核心板快速开始](./assets/核心板快速开始.md)进行快速使用。
 
-### 运行程序
+### 运行程序 (Running the Program)
 
-#### 权限设置
+#### 权限设置 (Permissions)
 将Type-C线连接到Linux系统上，检测到串口设备后，设置串口权限，使用如下命令：
 
 ```shell
 sudo chmod 777 /dev/ttyACM0
 ```
 
-#### ROS示例程序
+#### ROS示例程序 (ROS Example)
 
 如果相机设备是**海康**、**大恒**,**大华**等相机，无论是USB3.0接口或者网口接口，那么我们的SDK将自动检测相机数量然后读取图片信息并以ROS消息的格式发布出来。
 如果是其他的相机系统，由于相机时间计算较为复杂，则需要参考高级功能中**自定义相机型号**，自行编写相机读取代码以及时间计算代码。
@@ -111,9 +112,11 @@ make -j8
 
 正常运行则可以通过`rostopic list`的方法得到传感器信息，进一步的可以通过`rostopic echo /imu_sync_board`查看IMU数据
 
-![full](./assets/d_img_7.png)
+<p align="center" width="100%">
+<img alt="full" src="./assets/d_img_7.png"/>
+</p>
 
-#### ZMQ示例程序
+#### ZMQ示例程序 (ZMQ Example)
 
 与ROS程序相同，ZMQ示例程序提供了非ROS环境下数据发送方法。通过将图像消息与IMU消息进行序列化(ProtoBuf)后通过ZMQ发布。
 
@@ -131,12 +134,12 @@ make -j8
 ./zmq_demo_zmq_node
 ```
 
-## 高级功能
+## 高级功能 (Advanced Features)
 
-### 网口通信同步
+### 网口通信同步(Ethernet Communication Synchronization)
 全功能时间同步板提供了一个百兆网口，能够更高效、更准确的进行时间同步。网口提供了更快的数据传输速度和更加稳定的通讯质量，在实现网口传输数据的同时，还额外加入精简版的[PTP对时协议](https://en.wikipedia.org/wiki/Precision_Time_Protocol)，从而实现了与主机时间同步，进而传感器数据采集时间与主机时间一致。如果要使用网口通信功能则需要按如下步骤进行。
 
-### 参数配置
+### 参数配置 (Parameter Configuration)
 全功能时间同步板出厂的默认IP地址为192.168.1.188端口号为8888。为了方便用户自定义组网。可通过以下方式配置同步板的IP地址与端口。
 IP设置：
 例如：设置网络IP号为192.168.192.188，使用Typc连接线连接同步板和电脑，安装任意版本的串口助手，串口助手发送以下数数据给同步板：
@@ -165,7 +168,7 @@ PTP同步只有在全功能时间同步板中才会启用，启动方式使用UD
  // 关闭数据传输和PTP同步 
  udp_manager->Stop();
 ```
-### 姿态解算
+### 姿态解算 (Attitude Calculation)
 时间同步板搭载了最新推出的[ICM42688P]([./assets/相机购买指南.md](https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/))，为了方便非紧耦合算法的使用，我们提供基于6轴IMU的航姿解算功能。具体实现可以参考`demo/udp_demo`中的实现。
 ```c++
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
@@ -184,7 +187,7 @@ void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
 }
 ```
 ![full](./assets/angle.png)
-## 自定义相机型号
+## 自定义相机型号 (Custom Camera Models)
 
 如果使用的相机型号不是指定厂商的，那么需要自己进行一定的编程，如果需要我们协助支持，请私信或者提出相关的issue。在`demo/CustomisedCamera`文件夹下有一个示例代码，可以参考这个示例代码进行开发。
 这里简单介绍一下开发步骤：
