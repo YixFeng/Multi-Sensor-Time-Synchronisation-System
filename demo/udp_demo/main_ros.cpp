@@ -9,20 +9,19 @@
 #include "Fusion.h"
 
 FusionAhrs ahrs;
-
-inline ros::Time CreateRosTimestamp(const uint64_t timestamp_micoseconds) {
-    static constexpr uint32_t kNanosecondsPerSecond = 1e9;
-    const auto kTimestampU64 = timestamp_micoseconds * 1000;
-    const uint32_t kTimestampSec = kTimestampU64 / kNanosecondsPerSecond;
-    const uint32_t kRosTimestampNsec = kTimestampU64 - (kTimestampSec * kNanosecondsPerSecond);
-    return {kTimestampSec, kRosTimestampNsec};
+inline ros::Time CreateRosTimestamp(const uint64_t mico_sec) {
+  uint32_t nsec_per_second = 1e9;
+  auto u64 = mico_sec * 1000;
+  uint32_t sec = u64 / nsec_per_second;
+  uint32_t nsec = u64 - (sec * nsec_per_second);
+  return {sec, nsec};
 }
 
 void PublishIMUData(const ros::Publisher& pub, const ImuData& imudata) {
 
   FusionVector gyroscope = {imudata.gx, imudata.gy, imudata.gz};
   FusionVector accelerometer = {imudata.ax, imudata.ay, imudata.az};
-  FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.0025f);
+  FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer, 0.005f);
   FusionQuaternion q = FusionAhrsGetQuaternion(&ahrs);
 
   sensor_msgs::Imu imu_msg_data;
@@ -48,7 +47,7 @@ void SigIntHandler(int sig) {
   ros::shutdown();  // 让ROS节点安全退出
 }
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "CIS",ros::init_options::NoSigintHandler);
+    ros::init(argc, argv, "udp_demo",ros::init_options::NoSigintHandler);
     ros::NodeHandle node;
     FusionAhrsInitialise(&ahrs);
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
