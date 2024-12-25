@@ -81,8 +81,6 @@ int main(int argc, char** argv) {
         }
         loop_rate.sleep();
     }
-    // 释放资源
-    // serial_manager->Stop();
     CustCamManger::GetInstance().Stop();
     return 0;
 }
