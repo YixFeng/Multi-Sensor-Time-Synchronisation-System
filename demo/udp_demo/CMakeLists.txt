@@ -18,8 +18,13 @@ endif ()
 
 
 find_package(catkin QUIET)
+find_package(OpenCV REQUIRED)
+
+message(STATUS "OpenCV Version: "${OpenCV_VERSION})
+
 if (catkin_FOUND)
   message(STATUS "ROS found, Compiling ROS nodes")
+
   find_package(catkin REQUIRED COMPONENTS
       roscpp
       sensor_msgs
@@ -27,9 +32,24 @@ if (catkin_FOUND)
       image_transport
       geometry_msgs
   )
+
   file(GLOB_RECURSE SOURCE_FILES
       main_ros.cpp
   )
+
+  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libImgProc.a)
+
+  add_library(ir_depends SHARED
+    ${SDK_PATH}/src/Clinet_API.cpp
+    ${SDK_PATH}/src/NetSocket.cpp
+    ${SDK_PATH}/src/customised_camera.cpp
+  )
+  target_include_directories(ir_depends PRIVATE
+    ${SDK_PATH}/include
+    ${OpenCV_INCLUDE_DIRS}
+  )
+  target_link_libraries(ir_depends PRIVATE ${IR_CAM_LIB_PATH})
+
   add_executable(${PROJECT_NAME}_ros_node ${SOURCE_FILES})
   target_link_directories(${PROJECT_NAME}_ros_node PRIVATE
       BEFORE ${SDK_PATH}/lib
@@ -38,12 +58,14 @@ if (catkin_FOUND)
       MvCameraControl
       fusion
       infinite_sense_core
+      ir_depends
+      ${OpenCV_LIBS}
       ${catkin_LIBRARIES}
-
   )
   target_include_directories(${PROJECT_NAME}_ros_node PRIVATE
       ${catkin_INCLUDE_DIRS}
       ${SDK_PATH}/include
+      ${OpenCV_INCLUDE_DIRS}
   )
   target_compile_definitions(${PROJECT_NAME}_ros_node PUBLIC -DROS_PLATFORM)
 endif ()

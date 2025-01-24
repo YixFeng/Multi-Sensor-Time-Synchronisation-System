@@ -5,6 +5,7 @@
 
 #include "udp_manager.h"
 #include "cam_manager.h"
+#include "customised_camera.h"
 #include "data_manager.h"
 #include "Fusion.h"
 
