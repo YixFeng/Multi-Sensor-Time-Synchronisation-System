@@ -38,6 +38,7 @@ if (catkin_FOUND)
   )
 
   set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libImgProc.a)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SDK_PATH}/lib)
 
   add_library(ir_depends SHARED
     ${SDK_PATH}/src/Clinet_API.cpp
