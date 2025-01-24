@@ -62,8 +62,8 @@ int main(int argc, char** argv) {
     udp_manager->Start();
 
     ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu_sync_board", 1000);
-    CamManger::GetInstance().Initialization();
-    CamManger::GetInstance().Start();
+    CustCamManger::GetInstance().Initialization();
+    CustCamManger::GetInstance().Start();
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     image_transport::ImageTransport it(node);
     std::vector<std::string> all_cam_names;
@@ -93,6 +93,6 @@ int main(int argc, char** argv) {
         loop_rate.sleep();
     }
     udp_manager->Stop();
-    CamManger::GetInstance().Stop();
+    CustCamManger::GetInstance().Stop();
     return 0;
 }

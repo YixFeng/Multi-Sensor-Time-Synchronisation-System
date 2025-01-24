@@ -1,6 +1,11 @@
 #pragma once
 #include <vector>
 #include <thread>
+#include <iostream>
+#include <stdio.h>
+#include "Clinet_API.h"
+#include "ImgProc.h"
+#define BUFFER_SIZE 640*1024*2
 
 class CustCamManger {
 public:
@@ -32,4 +37,8 @@ private:
     std::vector<std::thread> cam_threads_;
     // 是否正在运行标志位
     bool is_running_{false};
+    // 相机初始化标志位
+    bool bInit{false};
+    // 相机设备信息
+    static NET_SERVER_DEVICEINFO deviceInfo;
 };
