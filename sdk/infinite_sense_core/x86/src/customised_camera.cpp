@@ -103,7 +103,7 @@ void CustCamManger::Receive(const std::string &name) const {
         // 2. 将图像数据存入img_data
         img_data.image = flipped_img;
         // 3. 自定义相机获取曝光时间
-        float expose_time_us = 0;
+        float expose_time_us = 1e4;
         // 4. 将曝光时间存入img_data t = t_trigger + t_expose / 2
         img_data.time_stamp_us = DataManger::GetInstance().GetLastTiggerTime() + static_cast<uint64_t>(expose_time_us / 2.);
         // 5. 设置相机名字
