@@ -4,6 +4,7 @@
 #include <sensor_msgs/Imu.h>
 
 #include "cam_manager.h"
+#include "customised_camera.h"
 #include "serial_manager.h"
 #include "data_manager.h"
 
@@ -46,8 +47,8 @@ int main(int argc, char** argv) {
   ros::Publisher imu_pub = node.advertise<sensor_msgs::Imu>("/imu_sync_board", 1000);
 
   // 相机线程初始化
-  CamManger::GetInstance().Initialization();
-  CamManger::GetInstance().Start();
+  CustCamManger::GetInstance().Initialization();
+  CustCamManger::GetInstance().Start();
 
   // 等待相机启动
   std::this_thread::sleep_for(std::chrono::milliseconds(5000));
@@ -89,6 +90,6 @@ int main(int argc, char** argv) {
     }
     // 释放资源
     serial_manager->Stop();
-    CamManger::GetInstance().Stop();
+    CustCamManger::GetInstance().Stop();
     return 0;
 }
