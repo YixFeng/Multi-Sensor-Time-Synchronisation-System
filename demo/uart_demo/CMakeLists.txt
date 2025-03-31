@@ -17,6 +17,10 @@ else (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES 
 endif ()
 
 find_package(catkin QUIET)
+find_package(OpenCV REQUIRED)
+
+message(STATUS "OpenCV Version: "${OpenCV_VERSION})
+
 if (catkin_FOUND)
   message(STATUS "ROS found, Compiling ROS nodes")
   find_package(catkin REQUIRED COMPONENTS
@@ -29,17 +33,36 @@ if (catkin_FOUND)
   file(GLOB_RECURSE SOURCE_FILES
       main_ros.cpp
   )
+
+  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libImgProc.a)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SDK_PATH}/lib)
+
+  add_library(ir_depends SHARED
+    ${SDK_PATH}/src/Clinet_API.cpp
+    ${SDK_PATH}/src/NetSocket.cpp
+    ${SDK_PATH}/src/customised_camera.cpp
+  )
+
+  target_include_directories(ir_depends PRIVATE
+    ${SDK_PATH}/include
+    ${OpenCV_INCLUDE_DIRS}
+  )
+  target_link_libraries(ir_depends PRIVATE ${IR_CAM_LIB_PATH})
+
   add_executable(${PROJECT_NAME}_ros_node ${SOURCE_FILES})
   target_link_directories(${PROJECT_NAME}_ros_node PRIVATE
       ${SDK_PATH}/lib
   )
   target_link_libraries(${PROJECT_NAME}_ros_node
       infinite_sense_core
+      ir_depends
+      ${OpenCV_LIBS}
       ${catkin_LIBRARIES}
   )
   target_include_directories(${PROJECT_NAME}_ros_node PRIVATE
       ${catkin_INCLUDE_DIRS}
       ${SDK_PATH}/include
+      ${OpenCV_INCLUDE_DIRS}
   )
   target_compile_definitions(${PROJECT_NAME}_ros_node PUBLIC -DROS_PLATFORM)
 endif ()
