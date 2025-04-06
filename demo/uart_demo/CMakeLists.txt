@@ -36,10 +36,10 @@ if (catkin_FOUND)
 
   set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libImgProc.a)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SDK_PATH}/lib)
-
+  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libIRSDKlib_x86.so)
+  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libIRSDKlib_arm64.so)
+  
   add_library(ir_depends SHARED
-    ${SDK_PATH}/src/Clinet_API.cpp
-    ${SDK_PATH}/src/NetSocket.cpp
     ${SDK_PATH}/src/customised_camera.cpp
   )
 
@@ -66,4 +66,5 @@ if (catkin_FOUND)
   )
   target_compile_definitions(${PROJECT_NAME}_ros_node PUBLIC -DROS_PLATFORM)
 endif ()
+
 
