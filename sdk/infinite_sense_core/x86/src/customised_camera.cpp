@@ -57,6 +57,12 @@ int FrameCallBack(void* lData, void* lParam) {
 
 bool CustCamManger::Initialization() {
     // 自定义相机初始化
+    int ret = IRSDK_Init();
+    if (ret == 0) {
+        printf("IRSDK_Init failed\n");
+        return false;
+    }
+    return true;
 }
 
 // 根据相机数量，构造对应数量的线程，读取相机
@@ -79,30 +85,32 @@ void CustCamManger::Stop() {
     cam_threads_.clear();
     cam_threads_.shrink_to_fit();
     // 2. 关闭相机, 自定义相机关闭
-
+    printf("Receive frame over\n\r");
+    int ret = IRSDK_Quit();
+    if (ret == 0) {
+        printf("Logout ok\n\r");
+    } else {
+        printf("Logout failed\n\r");
+    }
 }
 
 void CustCamManger::Receive(const std::string &name) const {
+    // 1. 自定义相机获取图像数据
+    T_IPADDR IpInfo[DEVICE_MAX];		//定义接收 ip 信息的数组  
+    memset(IpInfo, 0, sizeof(IpInfo)); //清零
+    IRSDK_SetIPAddrArray(IpInfo); //设置接收 IP 的空间
+#if 0
+// 模式1: 自动搜索相机
+    while (IpInfo[0].totalOnline == 0) sleep(10000);	
+#else
+// 模式2: 手动指定相机IP和端口
+    memcpy(IpInfo[0].IPAddr, "192.168.1.13", sizeof("192.168.1.13"));  //手动指定ip
+    IpInfo[0].DataPort = 13 * 10 + 30005; //自定义端口
+    IpInfo[0].Index = 0;
+    IpInfo[0].isValid = 1;
+    IpInfo[0].totalOnline = 1;
+#endif
     while (is_running_) {
-        // 1. 自定义相机获取图像数据
-        printf("Run Node Successfully\n");
-        T_IPADDR IpInfo[DEVICE_MAX];		//定义接收 ip 信息的数组
-        //需要初如化
-        IRSDK_Init();
-        memset(IpInfo, 0, sizeof(IpInfo)); //清零
-        IRSDK_SetIPAddrArray(IpInfo); //设置接收 IP 的空间
-
-    #if 0
-    // 模式1: 自动搜索相机
-        while (IpInfo[0].totalOnline == 0) sleep(10000);	
-    #else
-    // 模式2: 手动指定相机IP和端口
-        memcpy(IpInfo[0].IPAddr, "192.168.1.13", sizeof("192.168.1.13"));  //手动指定ip
-        IpInfo[0].DataPort = 13 * 10 + 30005; //自定义端口
-        IpInfo[0].Index = 0;
-        IpInfo[0].isValid = 1;
-        IpInfo[0].totalOnline = 1;
-    #endif
         CBF_IR pCBFframe = &FrameCallBack;	//回调函数使用
         printf("connect ip: %s\n", IpInfo[0].IPAddr);
         int ret =  IRSDK_Create(0, IpInfo[0], pCBFframe, NULL, NULL, NULL);
@@ -112,7 +120,7 @@ void CustCamManger::Receive(const std::string &name) const {
         // 2. 将图像数据存入img_data
         // 在回调函数中实现存入
         // 3. 自定义相机获取曝光时间
-        float expose_time_us = 1e4;
+        float expose_time_us = 0;
         // 4. 将曝光时间存入img_data t = t_trigger + t_expose / 2
         img_data.time_stamp_us = DataManger::GetInstance().GetLastTiggerTime() + static_cast<uint64_t>(expose_time_us / 2.);
         // 5. 设置相机名字

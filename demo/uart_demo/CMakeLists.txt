@@ -12,8 +12,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3  -Wall")
 
 if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
   set(SDK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../sdk/infinite_sense_core/arm)
+  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libIRSDKlib_arm64.so)
 else (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "amd64")
   set(SDK_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../sdk/infinite_sense_core/x86)
+  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libIRSDKlib_x86.so)
 endif ()
 
 find_package(catkin QUIET)
@@ -34,10 +36,7 @@ if (catkin_FOUND)
       main_ros.cpp
   )
 
-  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libImgProc.a)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SDK_PATH}/lib)
-  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libIRSDKlib_x86.so)
-  set(IR_CAM_LIB_PATH ${SDK_PATH}/lib/libIRSDKlib_arm64.so)
   
   add_library(ir_depends SHARED
     ${SDK_PATH}/src/customised_camera.cpp
